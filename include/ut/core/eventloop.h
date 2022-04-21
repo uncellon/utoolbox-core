@@ -24,6 +24,7 @@
 #define UT_EVENT_LOOP_H
 
 #include "delegate.h"
+#include "object.h"
 #include "task.h"
 
 #include <queue>
@@ -31,7 +32,7 @@
 
 namespace UT {
 
-class EventLoop {
+class EventLoop : public Object {
 public:
     /**************************************************************************
      * Constructors / Destructors

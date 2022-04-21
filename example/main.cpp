@@ -25,14 +25,14 @@ public:
 
 class DerivedObject1 : public UT::Object {
 public:
-    DerivedObject1(UT::EventLoop *loop = nullptr) : UT::Object(loop) { }
+    DerivedObject1(UT::Object* parent = nullptr) : UT::Object(parent) { }
 
     UT::Event<const std::string &> onMessage;
 };
 
 class DerivedObject2 : public UT::Object {
 public:
-    DerivedObject2(UT::EventLoop *loop = nullptr) : UT::Object(loop) { }
+    DerivedObject2(UT::Object* parent = nullptr) : UT::Object(parent) { }
 
     void messageHandler(const std::string &a) {
         std::cout << "Message received: " << a << std::endl;
@@ -78,8 +78,10 @@ int main(int argc, char *argv[]) {
     UT::EventLoop secondLoop;
     auto derivedObject1 = new DerivedObject1(&mainLoop);
     auto derivedObject2 = new DerivedObject2(&secondLoop);
+    auto derivedObject22 = new DerivedObject2(derivedObject1);
 
     derivedObject1->onMessage.addEventHandler(derivedObject2, &DerivedObject2::messageHandler);
+    derivedObject1->onMessage.addEventHandler(derivedObject22, &DerivedObject2::messageHandler);
     derivedObject1->onMessage.removeEventHandler(derivedObject2, &DerivedObject2::messageHandler);
 
     derivedObject1->onMessage.addEventHandler(derivedObject2, printFunction);
@@ -93,6 +95,7 @@ int main(int argc, char *argv[]) {
 
     sleep(1);
 
+    delete derivedObject22;
     delete derivedObject2;
 
     derivedObject1->onMessage("Hey!");

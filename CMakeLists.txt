@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(UTCore VERSION 0.0.1)
+project(UTCore VERSION 0.0.2)
 
 option(BUILD_EXAMPLES "Build examples" ON)
 option(BUILD_TESTS "Build tests" ON)

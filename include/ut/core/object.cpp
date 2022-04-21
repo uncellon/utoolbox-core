@@ -32,6 +32,13 @@ namespace UT {
 Object::Object(EventLoop* eventLoop)
 : m_eventLoop(eventLoop) { }
 
+Object::Object(Object* parent) {
+    if (!parent->eventLoop()) {
+        return;
+    }
+    m_eventLoop = parent->eventLoop();
+}
+
 Object::~Object() {
     EventDispatcher::getInstance()->clean(this);
 }

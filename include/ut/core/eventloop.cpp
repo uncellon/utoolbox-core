@@ -29,7 +29,8 @@ namespace UT {
  * Constructors / Destructors
  *****************************************************************************/
 
-EventLoop::EventLoop() {
+EventLoop::EventLoop()
+: Object(this) {
     m_running = true;
     m_threadLoop = new std::thread(&EventLoop::loop, this);
 }

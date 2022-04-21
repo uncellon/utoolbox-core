@@ -145,6 +145,19 @@ public:
         unsafeRemoveEventHandler(&delegate);
     }
 
+    // Method for EventDispatcher
+    virtual void removeEventHandler(AbstractDelegate* delegate) override {
+        std::unique_lock lock(m_mutex);
+        for (size_t i = 0; i < m_handlers.size(); ++i) {
+            if (m_handlers[i].delegate != delegate) {
+                continue;
+            }
+            delete m_handlers[i].delegate;
+            m_handlers.erase(m_handlers.begin() + i);
+            --i;
+        }
+    }
+
     /**************************************************************************
      * Overloaded operators
      *************************************************************************/
@@ -168,10 +181,6 @@ protected:
     /**************************************************************************
      * Methods (Protected)
      *************************************************************************/
-
-    virtual void removeEventHandler(AbstractDelegate* delegate) override {
-        throw std::runtime_error("Not implemented");
-    }
 
     inline int indexOfHandler(TDelegate* delegate) {
         for (size_t i = 0; i < m_handlers.size(); ++i) {
