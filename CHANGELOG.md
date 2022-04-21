@@ -14,3 +14,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.1] - 2022-04-19
 ### Added
 - Sources :)
+
+[0.0.2]: https://github.com/uncellon/utoolbox-core/releases/tag/v0.0.2
+[0.0.1]: https://github.com/uncellon/utoolbox-core/releases/tag/v0.0.1
