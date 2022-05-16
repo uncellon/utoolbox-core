@@ -1,13 +1,13 @@
 /******************************************************************************
  * 
- * Copyright (C) 2021 Dmitry Plastinin
+ * Copyright (C) 2022 Dmitry Plastinin
  * Contact: uncellon@yandex.ru, uncellon@gmail.com, uncellon@mail.ru
  * 
  * This file is part of the UToolbox Core library.
  * 
- * UToolbox Core is free software: you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as pubblished by the
- * Free Software Foundation, either version 3 of the License, or (at your 
+ * UToolbox Core is free software: you can redistribute it and/or modify it 
+ * under the terms of the GNU Lesser General Public License as pubblished by 
+ * the Free Software Foundation, either version 3 of the License, or (at your 
  * option) any later version.
  * 
  * UToolbox Core is distributed in the hope that it will be useful, but WITHOUT
@@ -48,8 +48,8 @@ public:
 
     bool attachmentValid(AbstractEvent* event, AbstractDelegate* delegate);
 
-    void lockAttachments() { m_mutex.lock_shared(); }
-    void unlockAttachments() { m_mutex.unlock_shared(); }
+    inline void lockAttachments() { m_mutex.lock_shared(); }
+    inline void unlockAttachments() { m_mutex.unlock_shared(); }
 
 protected:
     struct DispatcherInfo {
@@ -74,7 +74,7 @@ private:
      *************************************************************************/
 
     EventDispatcher() = default;    
-};
+}; // class EventDispatcher
 
 } // Hlk
 

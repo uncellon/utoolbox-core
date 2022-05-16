@@ -1,13 +1,13 @@
 /******************************************************************************
  * 
- * Copyright (C) 2021 Dmitry Plastinin
+ * Copyright (C) 2022 Dmitry Plastinin
  * Contact: uncellon@yandex.ru, uncellon@gmail.com, uncellon@mail.ru
  * 
  * This file is part of the UToolbox Core library.
  * 
- * UToolbox Core is free software: you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as pubblished by the
- * Free Software Foundation, either version 3 of the License, or (at your 
+ * UToolbox Core is free software: you can redistribute it and/or modify it 
+ * under the terms of the GNU Lesser General Public License as pubblished by 
+ * the Free Software Foundation, either version 3 of the License, or (at your 
  * option) any later version.
  * 
  * UToolbox Core is distributed in the hope that it will be useful, but WITHOUT
@@ -23,10 +23,10 @@
 #ifndef UT_TASK_H
 #define UT_TASK_H
 
-#include <future>
-
 #include "abstractevent.h"
 #include "delegate.h"
+
+#include <future>
 
 namespace UT {
 
@@ -67,7 +67,7 @@ protected:
      *************************************************************************/
 
     AbstractEvent* m_sender = nullptr;
-};
+}; // class AbstractTask
 
 
 
@@ -115,7 +115,7 @@ protected:
      *************************************************************************/
 
     Delegate<void()>* m_delegate;
-};
+}; // class Task<void()>
 
 
 
@@ -132,14 +132,15 @@ public:
      * Constructors / Destructors
      *************************************************************************/
 
-    Task(Delegate<void(TArgs...)>* delegate, TArgs&&... args)
-    : m_delegate(delegate), m_args(std::tuple<TArgs&&...>(args...)) { }
+    Task(Delegate<void(TArgs...)>* delegate, TArgs... args)
+    : m_delegate(delegate), m_args(std::tuple<TArgs...>(args...)) { }
 
     /**************************************************************************
      * Methods
      *************************************************************************/
 
-    virtual void execute() override { (*m_delegate)(std::get<TArgs...>(m_args)); }
+    // virtual void execute() override { (*m_delegate)(std::get<TArgs...>(m_args)); }
+    virtual void execute() override { std::apply(*m_delegate, m_args); }
 
     /**************************************************************************
      * Accessors / Mutators
@@ -154,7 +155,7 @@ protected:
 
     Delegate<void(TArgs...)>* m_delegate;
     std::tuple<TArgs...> m_args;
-};
+}; // class Task<void(TArgs...)>
 
 
 
@@ -193,7 +194,7 @@ protected:
 
     Delegate<TReturn()>* m_delegate;
     std::promise<TReturn> m_promise;
-};
+}; // class Task<TReturn()>
 
 
 
@@ -211,13 +212,13 @@ public:
      *************************************************************************/
 
     Task(Delegate<TReturn(TArgs...)>* delegate, TArgs... args) 
-    : m_delegate(delegate), m_args(std::tuple<TArgs&&...>(args...)) { }
+    : m_delegate(delegate), m_args(std::tuple<TArgs...>(args...)) { }
 
     /**************************************************************************
      * Methods
      *************************************************************************/
 
-    virtual inline void execute() override { m_promise.set_value((*m_delegate)(std::get<TArgs...>(m_args))); }
+    virtual inline void execute() override { m_promise.set_value(std::apply(*m_delegate, m_args)); }
 
     /**************************************************************************
      * Accessors / Mutators
@@ -234,7 +235,7 @@ protected:
     Delegate<TReturn(TArgs...)>* m_delegate;
     std::tuple<TArgs...> m_args;
     std::promise<TReturn> m_promise;
-};
+}; // class Task<TReturn(TArgs...)>
 
 } // namespace UT
 

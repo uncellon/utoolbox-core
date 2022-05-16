@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.0.3] - 2022-05-16
+### Changed
+- Code style.
+
 ## [0.0.2] - 2022-04-21
 ### Added
 - Object(Object* parent = nullptr) to make it easier to attach to the event loop.
@@ -15,5 +19,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Sources :)
 
+[0.0.3]: https://github.com/uncellon/utoolbox-core/releases/tag/v0.0.3
 [0.0.2]: https://github.com/uncellon/utoolbox-core/releases/tag/v0.0.2
 [0.0.1]: https://github.com/uncellon/utoolbox-core/releases/tag/v0.0.1

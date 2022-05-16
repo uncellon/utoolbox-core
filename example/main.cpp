@@ -39,6 +39,22 @@ public:
     }
 };
 
+class DerivedObject3 : public UT::Object {
+public:
+    DerivedObject3(UT::Object* parent = nullptr) : UT::Object(parent) { }
+
+    UT::Event<void*, int, int> onMessage;
+};
+
+class DerivedObject4 : public UT::Object {
+public:
+    DerivedObject4(UT::Object* parent = nullptr) : UT::Object(parent) { }
+
+    void messageHandler(void* a, int b, int c) {
+        std::cout << "Message received: " << a << b << c << std::endl;
+    }
+};
+
 int main(int argc, char *argv[]) {
     // UT::Delegate<void(const std::string &)> nd1, nd2;
     // nd1.bind(printFunction);
@@ -101,6 +117,18 @@ int main(int argc, char *argv[]) {
     derivedObject1->onMessage("Hey!");
 
     delete derivedObject1;
+
+
+
+    DerivedObject3 obj3(&mainLoop);
+    DerivedObject4 obj4(&mainLoop);
+
+    obj3.onMessage.addEventHandler(&obj4, &DerivedObject4::messageHandler);
+    obj3.onMessage((void*)"dsad", 1, 2);
+
+    sleep(1);
+
+
 
     return 0;
 }

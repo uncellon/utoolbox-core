@@ -1,13 +1,13 @@
 /******************************************************************************
  * 
- * Copyright (C) 2021 Dmitry Plastinin
+ * Copyright (C) 2022 Dmitry Plastinin
  * Contact: uncellon@yandex.ru, uncellon@gmail.com, uncellon@mail.ru
  * 
  * This file is part of the UToolbox Core library.
  * 
- * UToolbox Core is free software: you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as pubblished by the
- * Free Software Foundation, either version 3 of the License, or (at your 
+ * UToolbox Core is free software: you can redistribute it and/or modify it 
+ * under the terms of the GNU Lesser General Public License as pubblished by 
+ * the Free Software Foundation, either version 3 of the License, or (at your 
  * option) any later version.
  * 
  * UToolbox Core is distributed in the hope that it will be useful, but WITHOUT
@@ -166,7 +166,7 @@ public:
         std::unique_lock lock(m_mutex);
 
         for (size_t i = 0; i < m_handlers.size(); ++i) {
-            auto task = new Task<void(TArgs&&...)>(m_handlers[i].delegate, params...);
+            auto task = new Task<void(TArgs...)>(m_handlers[i].delegate, params...);
             task->setSender(this);
             m_handlers[i].eventLoop->pushTask(task);
         }
@@ -208,7 +208,7 @@ protected:
 
     std::mutex m_mutex;
     std::vector<EventHandlerInfo> m_handlers;
-};
+}; // class Event
 
 } // namespace UT
 
