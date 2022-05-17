@@ -9,7 +9,7 @@ unsigned int counter = 0;
 
 class A : public Object {
 public:
-    A(EventLoop *loop) : Object(loop) { }
+    A(EventLoop* loop) : Object(loop) { }
 
     void fireEvent() { onTriggered(); }
 
@@ -18,12 +18,12 @@ public:
 
 class B : public Object {
 public:
-    B(EventLoop *loop) : Object(loop) { }
+    B(EventLoop* loop) : Object(loop) { }
 
     void increaseCounter() { ++counter; }
 };
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     EventLoop mainLoop;
 
     auto a = new A(&mainLoop);

@@ -11,7 +11,7 @@ protected:
     bool m_result = false;
 };
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     Holder h;
     Delegate<void(bool)> delegate(&h, &Holder::setResult);
     delegate(true);

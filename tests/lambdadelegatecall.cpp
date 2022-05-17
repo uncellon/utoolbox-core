@@ -4,7 +4,7 @@ using namespace UT;
 
 bool result = false;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     Delegate<void(bool)> delegate;
     delegate.bind([] (bool value) {
         result = value;

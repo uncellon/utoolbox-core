@@ -8,7 +8,7 @@ void setResult(bool value) {
     result = value;
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     Delegate<void(bool)> delegate(setResult);
     delegate(true);
     if (!result) {

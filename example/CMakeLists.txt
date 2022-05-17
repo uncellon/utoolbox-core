@@ -1,4 +1,4 @@
-set(EXAMPLE_PROJECT HlkEventsExample)
+set(EXAMPLE_PROJECT UTCoreExample)
 
 file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false *.h *.cpp)
 
