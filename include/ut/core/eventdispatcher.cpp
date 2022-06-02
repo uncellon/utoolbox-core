@@ -30,7 +30,7 @@ std::shared_mutex EventDispatcher::m_mutex;
 EventDispatcher* EventDispatcher::m_instance = nullptr;
 
 EventDispatcher* EventDispatcher::getInstance() {
-    std::unique_lock lock(m_mutex);
+    std::shared_lock lock(m_mutex);
     if (!m_instance) {
         m_instance = new EventDispatcher();
     }
