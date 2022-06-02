@@ -36,8 +36,11 @@ EventLoop::EventLoop()
 }
 
 EventLoop::~EventLoop() {
-    m_running = false;
-    m_cv.notify_one();
+    {
+        std::unique_lock lock(m_mutex);
+        m_running = false;
+        m_cv.notify_one();
+    }
     m_threadLoop->join();
 }
 
@@ -46,9 +49,8 @@ EventLoop::~EventLoop() {
  *****************************************************************************/
 
 void EventLoop::pushTask(AbstractTask* task) {
-    m_mutex.lock();
+    std::unique_lock lock(m_mutex);
     m_tasks.emplace(task);
-    m_mutex.unlock();
     m_cv.notify_one();
 }
 
@@ -58,8 +60,7 @@ void EventLoop::pushTask(AbstractTask* task) {
 
 void EventLoop::loop() {
     auto eventDispatcher = EventDispatcher::getInstance();
-    std::mutex cvMutex;
-    std::unique_lock lock(cvMutex, std::defer_lock);
+    std::unique_lock lock(m_mutex);
 
     while (m_running) {
         if (m_tasks.empty()) {
@@ -67,10 +68,9 @@ void EventLoop::loop() {
             continue;
         }
 
-        m_mutex.lock();
         auto task = m_tasks.front();
         m_tasks.pop();
-        m_mutex.unlock();
+        lock.unlock();
 
         eventDispatcher->lockAttachments();
         if (eventDispatcher->attachmentValid(task->sender(), task->delegate())) {
@@ -78,6 +78,8 @@ void EventLoop::loop() {
         }
         delete task;
         eventDispatcher->unlockAttachments();
+
+        lock.lock();
     }
 }
 

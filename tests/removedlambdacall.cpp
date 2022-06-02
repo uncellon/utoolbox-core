@@ -41,6 +41,7 @@ int main(int argc, char* argv[]) {
     a->fireEvent();
 
     if (counter != 1) {
+        std::cout << "Counter is " << counter << std::endl;
         return 1;
     }
 

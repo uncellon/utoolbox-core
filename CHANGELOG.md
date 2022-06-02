@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.0.5] - 2022-06-02
+### Fixed
+- Removed extra mutex to avoid condition variable miss in event loop.
+
 ## [0.0.4] - 2022-06-02
 ### Fixed
 - Deadlock in EventDispatcher when getInstance() and lockAttachments called at 
@@ -25,6 +29,8 @@ loop.
 ### Added
 - Sources :)
 
+[0.0.5]: https://github.com/uncellon/utoolbox-core/releases/tag/v0.0.5
+[0.0.4]: https://github.com/uncellon/utoolbox-core/releases/tag/v0.0.4
 [0.0.3]: https://github.com/uncellon/utoolbox-core/releases/tag/v0.0.3
 [0.0.2]: https://github.com/uncellon/utoolbox-core/releases/tag/v0.0.2
 [0.0.1]: https://github.com/uncellon/utoolbox-core/releases/tag/v0.0.1
