@@ -23,7 +23,7 @@
 #ifndef UT_EVENT_DISPATCHER_H
 #define UT_EVENT_DISPATCHER_H
 
-#include <shared_mutex>
+#include <mutex>
 #include <vector>
 
 namespace UT {
@@ -48,8 +48,8 @@ public:
 
     bool attachmentValid(AbstractEvent* event, AbstractDelegate* delegate);
 
-    inline void lockAttachments() { m_mutex.lock_shared(); }
-    inline void unlockAttachments() { m_mutex.unlock_shared(); }
+    inline void lockAttachments() { m_mutex.lock(); }
+    inline void unlockAttachments() { m_mutex.unlock(); }
 
 protected:
     struct DispatcherInfo {
@@ -62,7 +62,7 @@ protected:
      * Members
      *************************************************************************/
 
-    static std::shared_mutex m_mutex;
+    static std::mutex m_mutex;
     static EventDispatcher* m_instance;
 
     std::mutex m_vectorMutex;
