@@ -21,6 +21,7 @@
  *****************************************************************************/
 
 #include "eventdispatcher.h"
+#include "eventloop.h"
 #include "object.h"
 
 namespace UT {
@@ -34,9 +35,11 @@ Object::Object(EventLoop* eventLoop)
 
 Object::Object(Object* parent) {
     if (!parent) {
+        m_eventLoop = EventLoop::getMainInstance();
         return;
     }
     if (!parent->eventLoop()) {
+        m_eventLoop = EventLoop::getMainInstance();
         return;
     }
     m_eventLoop = parent->eventLoop();

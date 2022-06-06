@@ -9,7 +9,7 @@ unsigned int counter = 0;
 
 class A : public Object {
 public:
-    A(EventLoop* loop) : Object(loop) { }
+    A(Object* parent = nullptr) : Object(parent) { }
 
     void fireEvent() { onTriggered(); }
     
@@ -18,16 +18,15 @@ public:
 
 class B : public Object {
 public:
-    B(EventLoop* loop) : Object(loop) { }
+    B(Object* parent = nullptr) : Object(parent) { }
 
     void triggerHandler() { ++counter; }
 };
 
 int main(int argc, char* argv[]) {
-    EventLoop mainLoop;
-
-    auto a = new A(&mainLoop);
-    auto b = new B(&mainLoop);
+    // Create objects with default event loop
+    auto a = new A();
+    auto b = new B();
 
     a->fireEvent();
     a->onTriggered.addEventHandler(b, &B::triggerHandler);

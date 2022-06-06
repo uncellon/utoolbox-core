@@ -25,6 +25,9 @@
 
 namespace UT {
 
+std::mutex EventLoop::m_instanceMutex;
+EventLoop* EventLoop::m_mainInstance = nullptr;
+
 /******************************************************************************
  * Constructors / Destructors
  *****************************************************************************/
@@ -47,6 +50,14 @@ EventLoop::~EventLoop() {
 /******************************************************************************
  * Methods
  *****************************************************************************/
+
+EventLoop* EventLoop::getMainInstance() {
+    std::unique_lock lock(m_instanceMutex);
+    if (!m_mainInstance) {
+        m_mainInstance = new EventLoop();
+    }
+    return m_mainInstance;
+}
 
 void EventLoop::pushTask(AbstractTask* task) {
     std::unique_lock lock(m_mutex);

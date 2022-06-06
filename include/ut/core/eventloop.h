@@ -45,6 +45,8 @@ public:
      * Methods
      *************************************************************************/
 
+    static EventLoop* getMainInstance();
+
     void pushTask(AbstractTask* task);
 
 protected:
@@ -57,6 +59,9 @@ protected:
     /**************************************************************************
      * Members
      *************************************************************************/
+
+    static std::mutex m_instanceMutex;
+    static EventLoop* m_mainInstance;
 
     bool m_running = false;
     std::condition_variable m_cv;
