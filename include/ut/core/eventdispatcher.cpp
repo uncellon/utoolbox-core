@@ -26,11 +26,11 @@
 
 namespace UT {
 
-std::mutex EventDispatcher::m_mutex;
+std::mutex EventDispatcher::m_instanceMutex;
 EventDispatcher* EventDispatcher::m_instance = nullptr;
 
 EventDispatcher* EventDispatcher::getInstance() {
-    std::unique_lock lock(m_mutex);
+    std::unique_lock lock(m_instanceMutex);
     if (!m_instance) {
         m_instance = new EventDispatcher();
     }

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.0.8] - 2022-09-20
+### Fixed
+- Deadlock in EventDispatcher when getInstance() and lockAttachments called at
+the same time v2.
+
 ## [0.0.7] - 2022-06-06
 ### Added
 - Default event loop.

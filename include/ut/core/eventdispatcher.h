@@ -62,9 +62,10 @@ protected:
      * Members
      *************************************************************************/
 
-    static std::mutex m_mutex;
+    static std::mutex m_instanceMutex;
     static EventDispatcher* m_instance;
 
+    std::mutex m_mutex;
     std::mutex m_vectorMutex;
     std::vector<DispatcherInfo> m_attachments;
 
