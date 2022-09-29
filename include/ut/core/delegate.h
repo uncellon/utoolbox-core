@@ -112,7 +112,7 @@ public:
      * Overloaded operators
      *************************************************************************/
 
-    TReturn operator()(TArgs... args) {
+    TReturn operator()(TArgs... args) const {
         if (!m_wrapper) {
             return TReturn();
         }
