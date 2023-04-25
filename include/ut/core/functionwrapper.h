@@ -1,6 +1,6 @@
 /******************************************************************************
  * 
- * Copyright (C) 2022 Dmitry Plastinin
+ * Copyright (C) 2023 Dmitry Plastinin
  * Contact: uncellon@yandex.ru, uncellon@gmail.com, uncellon@mail.ru
  * 
  * This file is part of the UToolbox Core library.
@@ -47,12 +47,12 @@ public:
 
     // Copy constructor
     FunctionWrapper(const FunctionWrapper& other) 
-    : m_func(other.m_func) { }
+    : mFunc(other.mFunc) { }
 
     // Move constructor
     FunctionWrapper(FunctionWrapper&& other) 
-    : m_func(other.m_func) {
-        other.m_func = nullptr;
+    : mFunc(other.mFunc) {
+        other.mFunc = nullptr;
     }
 
     virtual ~FunctionWrapper() = default;
@@ -66,7 +66,7 @@ public:
     }
 
     void bind(TReturn (*func)(TArgs...)) {
-        m_func = func;
+        mFunc = func;
     }
 
     /**************************************************************************
@@ -74,7 +74,7 @@ public:
      *************************************************************************/
 
     virtual TReturn operator()(TArgs... args) override {
-        return (*m_func)(args...);
+        return (*mFunc)(args...);
     }
 
     // Copy assignment operator
@@ -82,7 +82,7 @@ public:
         if (this == &other) {
             return *this;
         }
-        m_func = other.m_func;
+        mFunc = other.mFunc;
         return *this;
     }
 
@@ -91,8 +91,8 @@ public:
         if (this == &other) {
             return *this;
         }
-        m_func = other.m_func;
-        other.m_func = nullptr;
+        mFunc = other.mFunc;
+        other.mFunc = nullptr;
         return *this;
     }
 
@@ -103,14 +103,14 @@ protected:
 
     virtual bool isEquals(const AbstractWrapper<TReturn(TArgs...)>& other) const override {
         const TFWrapper* otherPtr = dynamic_cast<const TFWrapper*>(&other);
-        return otherPtr != nullptr && m_func == otherPtr->m_func;
+        return otherPtr != nullptr && mFunc == otherPtr->mFunc;
     }
 
     /**************************************************************************
      * Members
      *************************************************************************/
 
-    TReturn (*m_func)(TArgs...) = nullptr;
+    TReturn (*mFunc)(TArgs...) = nullptr;
 }; // class FunctionWrapper
 
 } // namespace UT

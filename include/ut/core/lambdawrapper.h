@@ -1,6 +1,6 @@
 /******************************************************************************
  * 
- * Copyright (C) 2022 Dmitry Plastinin
+ * Copyright (C) 2023 Dmitry Plastinin
  * Contact: uncellon@yandex.ru, uncellon@gmail.com, uncellon@mail.ru
  * 
  * This file is part of the UToolbox Core library.
@@ -42,17 +42,17 @@ public:
 
     // Copy constructor
     LambdaWrapper(const LambdaWrapper& other) { 
-        m_lambda = new TLambda(*(other.m_lambda)); 
+        mLambda = new TLambda(*(other.mLambda)); 
     }
 
     // Move constructor
     LambdaWrapper(LambdaWrapper&& other) 
-    : m_lambda(other.m_lambda) {
-        other.m_lambda = nullptr;
+    : mLambda(other.mLambda) {
+        other.mLambda = nullptr;
     }
 
     virtual ~LambdaWrapper() {
-        delete m_lambda;
+        delete mLambda;
     }
 
     /**************************************************************************
@@ -64,7 +64,7 @@ public:
     }
 
     void bind(TLambda&& lambda) { 
-        m_lambda = new TLambda(lambda);
+        mLambda = new TLambda(lambda);
     }
 
     /**************************************************************************
@@ -72,7 +72,7 @@ public:
      *************************************************************************/
 
     virtual TReturn operator()(TArgs... args) override {
-        return m_lambda->operator()(args...);
+        return mLambda->operator()(args...);
     }
 
     // Copy assignment operator
@@ -80,7 +80,7 @@ public:
         if (this == &other) {
             return *this;
         }
-        m_lambda = other.m_lambda;
+        mLambda = other.mLambda;
         return *this;
     }
 
@@ -89,8 +89,8 @@ public:
         if (this == &other) {
             return *this;
         }
-        m_lambda = other.m_lambda;
-        other.m_lambda = nullptr;
+        mLambda = other.mLambda;
+        other.mLambda = nullptr;
         return *this;
     }
 
@@ -101,14 +101,14 @@ protected:
 
     virtual bool isEquals(const AbstractWrapper<TReturn(TArgs...)>& other) const override {
         const TLWrapper* otherPtr = dynamic_cast<const TLWrapper*>(&other);
-        return otherPtr != nullptr && m_lambda == otherPtr->m_lambda;
+        return otherPtr != nullptr && mLambda == otherPtr->mLambda;
     }
 
     /**************************************************************************
      * Members
      *************************************************************************/
 
-    TLambda* m_lambda = nullptr;
+    TLambda* mLambda = nullptr;
 }; // class LambdaWrapper
 
 } // namespace UT

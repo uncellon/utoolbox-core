@@ -1,6 +1,6 @@
 /******************************************************************************
  * 
- * Copyright (C) 2022 Dmitry Plastinin
+ * Copyright (C) 2023 Dmitry Plastinin
  * Contact: uncellon@yandex.ru, uncellon@gmail.com, uncellon@mail.ru
  * 
  * This file is part of the UToolbox Core library.
@@ -23,15 +23,8 @@
 #ifndef UT_EVENT_H
 #define UT_EVENT_H
 
-#include "abstractevent.h"
-#include "delegate.h"
 #include "eventdispatcher.h"
 #include "eventloop.h"
-#include "object.h"
-#include "task.h"
-
-#include <mutex>
-#include <vector>
 
 namespace UT {
 
@@ -47,25 +40,25 @@ public:
     Event() = default;
 
     Event(const Event& other) {
-        for (size_t i = 0; i < other.m_handlers.size(); ++i) {
-            m_handlers.emplace_back((other->m_handlers)[i]);
+        for (size_t i = 0; i < other.mHandlers.size(); ++i) {
+            mHandlers.emplace_back((other->m_handlers)[i]);
         }
     }
 
     Event(Event&& other) {
-        m_handlers = other.m_handlers;
-        other.m_handlers.clear();
+        mHandlers = other.mHandlers;
+        other.mHandlers.clear();
     }
 
     ~Event() {
-        std::unique_lock lock(m_mutex);
+        std::unique_lock lock(mMutex);
 
         EventDispatcher::getInstance()->eventDestroyed(this);
 
-        for (const auto& eventHandlerInfo : m_handlers) {
+        for (const auto& eventHandlerInfo : mHandlers) {
             delete eventHandlerInfo.delegate;
         }
-        m_handlers.clear();
+        mHandlers.clear();
     }
 
     /**************************************************************************
@@ -74,7 +67,7 @@ public:
 
     // Add function event handler
     void addEventHandler(Object* context, void (*func)(TArgs...)) {
-        std::unique_lock lock(m_mutex);
+        std::unique_lock lock(mMutex);
 
         auto delegate = new TDelegate(func);
 
@@ -83,14 +76,14 @@ public:
             return;
         }
 
-        m_handlers.emplace_back( EventHandlerInfo { delegate, context->eventLoop() });
+        mHandlers.emplace_back( EventHandlerInfo { delegate, context->eventLoop() });
         EventDispatcher::getInstance()->registerAttachment(this, context, delegate);
     }
 
     // Add method event handler
     template<class TObject>
     void addEventHandler(TObject* context, void (TObject::*method)(TArgs...)) {
-        std::unique_lock lock(m_mutex);
+        std::unique_lock lock(mMutex);
 
         auto delegate = new TDelegate();
         delegate->bind(context, method);
@@ -100,14 +93,14 @@ public:
             return;
         }
 
-        m_handlers.emplace_back( EventHandlerInfo { delegate, context->eventLoop() });
+        mHandlers.emplace_back( EventHandlerInfo { delegate, context->eventLoop() });
         EventDispatcher::getInstance()->registerAttachment(this, context, delegate);
     }
 
     // Add lambda event handler
     template<class TLambda>
     void addEventHandler(Object* context, TLambda&& lambda) {
-        std::unique_lock lock(m_mutex);
+        std::unique_lock lock(mMutex);
 
         auto delegate = new TDelegate();
         delegate->bind(std::move(lambda));
@@ -117,14 +110,14 @@ public:
             return;
         }
 
-        m_handlers.emplace_back( EventHandlerInfo { delegate, context->eventLoop() } );
+        mHandlers.emplace_back( EventHandlerInfo { delegate, context->eventLoop() } );
         EventDispatcher::getInstance()->registerAttachment(this, context, delegate);
     }
 
 
     // Remove function event handler
     void removeEventHandler(Object* context, void (*func)(TArgs...)) {
-        std::unique_lock lock(m_mutex);
+        std::unique_lock lock(mMutex);
         TDelegate delegate(func);
         unsafeRemoveEventHandler(&delegate);
     }
@@ -132,7 +125,7 @@ public:
     // Remove method event handler
     template<class TObject>
     void removeEventHandler(TObject* object, void (TObject::*method)(TArgs...)) {
-        std::unique_lock lock(m_mutex);
+        std::unique_lock lock(mMutex);
         TDelegate delegate(object, method);
         unsafeRemoveEventHandler(&delegate);
     }
@@ -140,20 +133,20 @@ public:
     // Remove lambda event handler
     template<class TLambda>
     void removeEventHandler(Object* context, TLambda&& lambda) {
-        std::unique_lock lock(m_mutex);
+        std::unique_lock lock(mMutex);
         TDelegate delegate(std::move(lambda));
         unsafeRemoveEventHandler(&delegate);
     }
 
     // Method for EventDispatcher
     virtual void removeEventHandler(AbstractDelegate* delegate) override {
-        std::unique_lock lock(m_mutex);
-        for (size_t i = 0; i < m_handlers.size(); ++i) {
-            if (m_handlers[i].delegate != delegate) {
+        std::unique_lock lock(mMutex);
+        for (size_t i = 0; i < mHandlers.size(); ++i) {
+            if (mHandlers[i].delegate != delegate) {
                 continue;
             }
-            delete m_handlers[i].delegate;
-            m_handlers.erase(m_handlers.begin() + i);
+            delete mHandlers[i].delegate;
+            mHandlers.erase(mHandlers.begin() + i);
             --i;
         }
     }
@@ -163,12 +156,12 @@ public:
      *************************************************************************/
 
     void operator()(TArgs... params, bool async = false) {
-        std::unique_lock lock(m_mutex);
+        std::unique_lock lock(mMutex);
 
-        for (size_t i = 0; i < m_handlers.size(); ++i) {
-            auto task = new Task<void(TArgs...)>(m_handlers[i].delegate, params...);
+        for (size_t i = 0; i < mHandlers.size(); ++i) {
+            auto task = new Task<void(TArgs...)>(mHandlers[i].delegate, params...);
             task->setSender(this);
-            m_handlers[i].eventLoop->pushTask(task);
+            mHandlers[i].eventLoop->pushTask(task);
         }
     }
 
@@ -183,8 +176,8 @@ protected:
      *************************************************************************/
 
     inline int indexOfHandler(TDelegate* delegate) {
-        for (size_t i = 0; i < m_handlers.size(); ++i) {
-            if ( *(m_handlers[i].delegate) != *delegate ) {
+        for (size_t i = 0; i < mHandlers.size(); ++i) {
+            if ( *(mHandlers[i].delegate) != *delegate ) {
                 continue;
             }
             return i;
@@ -197,17 +190,17 @@ protected:
         if (index == -1) {
             return;
         }
-        EventDispatcher::getInstance()->removeAttachment(this, m_handlers[index].delegate);
-        delete m_handlers[index].delegate;
-        m_handlers.erase(m_handlers.begin() + index);
+        EventDispatcher::getInstance()->removeAttachment(this, mHandlers[index].delegate);
+        delete mHandlers[index].delegate;
+        mHandlers.erase(mHandlers.begin() + index);
     }
 
     /**************************************************************************
      * Members
      *************************************************************************/
 
-    std::mutex m_mutex;
-    std::vector<EventHandlerInfo> m_handlers;
+    std::mutex mMutex;
+    std::vector<EventHandlerInfo> mHandlers;
 }; // class Event
 
 } // namespace UT

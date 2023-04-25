@@ -9,7 +9,9 @@
     - [Event with lambda handler](#event-with-lambda-handler)
 
 ## Description
-UToolbox Core provides an event-driven approach to application development. It's based on event loops - independent thread that process various user tasks in order. Every custom class that needs to implement events must iherit from the UT::Object class. The UT::Object constructor takes one argument, a reference to another UT::Object object. In other words, the parent object. Root UT::Object must be an event loop. Thus, all objects associated with the event loop will push tasks in this event loop. When the event loop processes a task, it calls the event handlers associated with that event. Event handler is a wrapped object that contains function, method or lambda.
+Main goal of UToolbox Core is provide an easy event-driven approach to application development.
+
+It's based on event loops - independent thread that process various user tasks in order. Every custom class that needs to implement events must iherit from the `UT::Object` class. The `UT::Object` constructor takes one argument, a reference to another `UT::Object` object. In other words, the parent object. Root `UT::Object` must be an event loop. Thus, all objects associated with the event loop will push tasks in this event loop. When the event loop processes a task, it calls the event handlers associated with that event. Event handler is a wrapped object that contains function, method or lambda.
 
 ## Examples
 
@@ -78,6 +80,7 @@ public:
 }; // class EventHandler
 
 int main(int argc, char* argv[]) {
+    // UT::EventLoop::getMainInstance() provides default singleton Event Loop
     UT::EventLoop mainEventLoop;
 
     EventHolder eh(&mainEventLoop);

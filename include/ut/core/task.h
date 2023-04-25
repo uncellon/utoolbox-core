@@ -1,6 +1,6 @@
 /******************************************************************************
  * 
- * Copyright (C) 2022 Dmitry Plastinin
+ * Copyright (C) 2023 Dmitry Plastinin
  * Contact: uncellon@yandex.ru, uncellon@gmail.com, uncellon@mail.ru
  * 
  * This file is part of the UToolbox Core library.
@@ -58,15 +58,15 @@ public:
 
     virtual AbstractDelegate* delegate() const = 0;
 
-    inline void setSender(AbstractEvent* sender) { m_sender = sender; }
-    inline AbstractEvent* sender() const { return m_sender; }
+    inline void setSender(AbstractEvent* sender) { mSender = sender; }
+    inline AbstractEvent* sender() const { return mSender; }
 
 protected:
     /**************************************************************************
      * Members
      *************************************************************************/
 
-    AbstractEvent* m_sender = nullptr;
+    AbstractEvent* mSender = nullptr;
 }; // class AbstractTask
 
 
@@ -95,26 +95,26 @@ public:
      * Constructors / Destructors
      *************************************************************************/
 
-    Task(Delegate<void()>* delegate) : m_delegate(delegate) { }
+    Task(Delegate<void()>* delegate) : mDelegate(delegate) { }
 
     /**************************************************************************
      * Methods
      *************************************************************************/
 
-    virtual inline void execute() override { (*m_delegate)(); }
+    virtual inline void execute() override { (*mDelegate)(); }
 
     /**************************************************************************
      * Accessors / Mutators
      *************************************************************************/
 
-    virtual AbstractDelegate* delegate() const override { return m_delegate; }
+    virtual AbstractDelegate* delegate() const override { return mDelegate; }
 
 protected:
     /**************************************************************************
      * Members
      *************************************************************************/
 
-    Delegate<void()>* m_delegate;
+    Delegate<void()>* mDelegate;
 }; // class Task<void()>
 
 
@@ -133,28 +133,28 @@ public:
      *************************************************************************/
 
     Task(Delegate<void(TArgs...)>* delegate, TArgs... args)
-    : m_delegate(delegate), m_args(std::tuple<TArgs...>(args...)) { }
+    : mDelegate(delegate), mArgs(std::tuple<TArgs...>(args...)) { }
 
     /**************************************************************************
      * Methods
      *************************************************************************/
 
     // virtual void execute() override { (*m_delegate)(std::get<TArgs...>(m_args)); }
-    virtual void execute() override { std::apply(*m_delegate, m_args); }
+    virtual void execute() override { std::apply(*mDelegate, mArgs); }
 
     /**************************************************************************
      * Accessors / Mutators
      *************************************************************************/
 
-    virtual AbstractDelegate* delegate() const override { return m_delegate; }
+    virtual AbstractDelegate* delegate() const override { return mDelegate; }
 
 protected:
     /**************************************************************************
      * Members
      *************************************************************************/
 
-    Delegate<void(TArgs...)>* m_delegate;
-    std::tuple<TArgs...> m_args;
+    Delegate<void(TArgs...)>* mDelegate;
+    std::tuple<TArgs...> mArgs;
 }; // class Task<void(TArgs...)>
 
 
@@ -172,28 +172,28 @@ public:
      * Constructors / Destructors
      *************************************************************************/
 
-    Task(Delegate<TReturn()>* delegate) : m_delegate(delegate) { }
+    Task(Delegate<TReturn()>* delegate) : mDelegate(delegate) { }
 
     /**************************************************************************
      * Methods
      *************************************************************************/
 
-    virtual inline void execute() override { m_promise.set_value((*m_delegate)()); }
+    virtual inline void execute() override { mPromise.set_value((*mDelegate)()); }
 
     /**************************************************************************
      * Accessors / Mutators
      *************************************************************************/
 
-    virtual AbstractDelegate* delegate() const override { return m_delegate; }
-    std::future<TReturn> future() { return m_promise.get_future(); }
+    virtual AbstractDelegate* delegate() const override { return mDelegate; }
+    std::future<TReturn> future() { return mPromise.get_future(); }
 
 protected:
     /**************************************************************************
      * Members
      *************************************************************************/
 
-    Delegate<TReturn()>* m_delegate;
-    std::promise<TReturn> m_promise;
+    Delegate<TReturn()>* mDelegate;
+    std::promise<TReturn> mPromise;
 }; // class Task<TReturn()>
 
 
@@ -212,29 +212,29 @@ public:
      *************************************************************************/
 
     Task(Delegate<TReturn(TArgs...)>* delegate, TArgs... args) 
-    : m_delegate(delegate), m_args(std::tuple<TArgs...>(args...)) { }
+    : mDelegate(delegate), mArgs(std::tuple<TArgs...>(args...)) { }
 
     /**************************************************************************
      * Methods
      *************************************************************************/
 
-    virtual inline void execute() override { m_promise.set_value(std::apply(*m_delegate, m_args)); }
+    virtual inline void execute() override { mPromise.set_value(std::apply(*mDelegate, mArgs)); }
 
     /**************************************************************************
      * Accessors / Mutators
      *************************************************************************/
 
-    virtual AbstractDelegate* delegate() const override { return m_delegate; }
-    std::future<TReturn> future() { return m_promise.get_future(); }
+    virtual AbstractDelegate* delegate() const override { return mDelegate; }
+    std::future<TReturn> future() { return mPromise.get_future(); }
 
 protected:
     /**************************************************************************
      * Members
      *************************************************************************/
 
-    Delegate<TReturn(TArgs...)>* m_delegate;
-    std::tuple<TArgs...> m_args;
-    std::promise<TReturn> m_promise;
+    Delegate<TReturn(TArgs...)>* mDelegate;
+    std::tuple<TArgs...> mArgs;
+    std::promise<TReturn> mPromise;
 }; // class Task<TReturn(TArgs...)>
 
 } // namespace UT

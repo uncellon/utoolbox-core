@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [0.0.10] - 2023-04-25
+### Changed
+- Small refactoring.
+
 ## [0.0.9] - 2022-09-29
 ### Changed
 - Operator() in delegate now is const.
@@ -46,6 +50,11 @@ loop.
 ### Added
 - Sources :)
 
+[0.0.10]: https://github.com/uncellon/utoolbox-core/releases/tag/v0.0.10
+[0.0.9]: https://github.com/uncellon/utoolbox-core/releases/tag/v0.0.9
+[0.0.8]: https://github.com/uncellon/utoolbox-core/releases/tag/v0.0.8
+[0.0.7]: https://github.com/uncellon/utoolbox-core/releases/tag/v0.0.7
+[0.0.6]: https://github.com/uncellon/utoolbox-core/releases/tag/v0.0.6
 [0.0.5]: https://github.com/uncellon/utoolbox-core/releases/tag/v0.0.5
 [0.0.4]: https://github.com/uncellon/utoolbox-core/releases/tag/v0.0.4
 [0.0.3]: https://github.com/uncellon/utoolbox-core/releases/tag/v0.0.3

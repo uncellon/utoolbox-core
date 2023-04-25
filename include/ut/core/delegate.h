@@ -1,6 +1,6 @@
 /******************************************************************************
  * 
- * Copyright (C) 2022 Dmitry Plastinin
+ * Copyright (C) 2023 Dmitry Plastinin
  * Contact: uncellon@yandex.ru, uncellon@gmail.com, uncellon@mail.ru
  * 
  * This file is part of the UToolbox Core library.
@@ -63,17 +63,17 @@ public:
 
     // Copy constructor
     Delegate(const Delegate& other) { 
-        m_wrapper = other.m_wrapper->clone(); 
+        mWrapper = other.mWrapper->clone(); 
     }
 
     // Move constructor
     Delegate(Delegate&& other) {
-        m_wrapper = other.m_wrapper;
-        other.m_wrapper = nullptr;
+        mWrapper = other.mWrapper;
+        other.mWrapper = nullptr;
     }
 
     ~Delegate() { 
-        delete m_wrapper; 
+        delete mWrapper; 
     }
 
     /**************************************************************************
@@ -82,30 +82,30 @@ public:
 
     // Bind function
     void bind(TReturn (*func)(TArgs...)) {
-        if (m_wrapper) {
-            delete m_wrapper;
+        if (mWrapper) {
+            delete mWrapper;
         }
-        m_wrapper = new FunctionWrapper<TReturn(TArgs...)>(func);
+        mWrapper = new FunctionWrapper<TReturn(TArgs...)>(func);
     }
 
     // Bind method
     template<class TClass>
     void bind(TClass* object, TReturn (TClass::*method)(TArgs...)) {
-        if (m_wrapper) {
-            delete m_wrapper;
+        if (mWrapper) {
+            delete mWrapper;
         }
-        m_wrapper = new MethodWrapper<TClass, TReturn(TArgs...)>(object, method);
+        mWrapper = new MethodWrapper<TClass, TReturn(TArgs...)>(object, method);
     }
 
     // Bind lambda
     template<class TLambda>
     void bind(TLambda&& lambda) {
-        if (m_wrapper) {
-            delete m_wrapper;
+        if (mWrapper) {
+            delete mWrapper;
         }
         auto wrapper = new LambdaWrapper<TLambda, TReturn(TArgs...)>();
         wrapper->bind(std::move(lambda));
-        m_wrapper = wrapper;
+        mWrapper = wrapper;
     }
 
     /**************************************************************************
@@ -113,10 +113,10 @@ public:
      *************************************************************************/
 
     TReturn operator()(TArgs... args) const {
-        if (!m_wrapper) {
+        if (!mWrapper) {
             return TReturn();
         }
-        return m_wrapper->operator()(args...);
+        return mWrapper->operator()(args...);
     }
 
     // Copy assignment operator
@@ -124,7 +124,7 @@ public:
         if (this == &other) {
             return *this;
         }
-        m_wrapper = other.m_wrapper->clone();
+        mWrapper = other.mWrapper->clone();
         return *this;
     };
 
@@ -133,17 +133,17 @@ public:
         if (this == &other) {
             return *this;
         }
-        m_wrapper = other.m_wrapper;
-        other.m_wrapper = nullptr;
+        mWrapper = other.mWrapper;
+        other.mWrapper = nullptr;
         return *this;
     }
 
     inline bool operator==(const Delegate<TReturn(TArgs...)>& other) const {
-        return *m_wrapper == *(other.m_wrapper);
+        return *mWrapper == *(other.mWrapper);
     }
 
     inline bool operator!=(const Delegate<TReturn(TArgs...)>& other) const {
-        return *m_wrapper != *(other.m_wrapper);
+        return *mWrapper != *(other.mWrapper);
     }
 
 protected:
@@ -151,7 +151,7 @@ protected:
      * Members
      *************************************************************************/
 
-    AbstractWrapper<TReturn(TArgs...)>* m_wrapper = nullptr;
+    AbstractWrapper<TReturn(TArgs...)>* mWrapper = nullptr;
 }; // class Delegate
 
 } // namespace UT

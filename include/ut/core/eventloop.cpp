@@ -1,6 +1,6 @@
 /******************************************************************************
  * 
- * Copyright (C) 2022 Dmitry Plastinin
+ * Copyright (C) 2023 Dmitry Plastinin
  * Contact: uncellon@yandex.ru, uncellon@gmail.com, uncellon@mail.ru
  * 
  * This file is part of the UToolbox Core library.
@@ -25,8 +25,8 @@
 
 namespace UT {
 
-std::mutex EventLoop::m_instanceMutex;
-EventLoop* EventLoop::m_mainInstance = nullptr;
+EventLoop* EventLoop::mMainInstance = nullptr;
+std::mutex EventLoop::mInstanceMutex;
 
 /******************************************************************************
  * Constructors / Destructors
@@ -34,17 +34,17 @@ EventLoop* EventLoop::m_mainInstance = nullptr;
 
 EventLoop::EventLoop()
 : Object(this) {
-    m_running = true;
-    m_threadLoop = new std::thread(&EventLoop::loop, this);
+    mRunning = true;
+    mThreadLoop = new std::thread(&EventLoop::loop, this);
 }
 
 EventLoop::~EventLoop() {
     {
-        std::unique_lock lock(m_mutex);
-        m_running = false;
-        m_cv.notify_one();
+        std::unique_lock lock(mMutex);
+        mRunning = false;
+        mCv.notify_one();
     }
-    m_threadLoop->join();
+    mThreadLoop->join();
 }
 
 /******************************************************************************
@@ -52,17 +52,17 @@ EventLoop::~EventLoop() {
  *****************************************************************************/
 
 EventLoop* EventLoop::getMainInstance() {
-    std::unique_lock lock(m_instanceMutex);
-    if (!m_mainInstance) {
-        m_mainInstance = new EventLoop();
+    std::unique_lock lock(mInstanceMutex);
+    if (!mMainInstance) {
+        mMainInstance = new EventLoop();
     }
-    return m_mainInstance;
+    return mMainInstance;
 }
 
 void EventLoop::pushTask(AbstractTask* task) {
-    std::unique_lock lock(m_mutex);
-    m_tasks.emplace(task);
-    m_cv.notify_one();
+    std::unique_lock lock(mMutex);
+    mTasks.emplace(task);
+    mCv.notify_one();
 }
 
 /******************************************************************************
@@ -71,16 +71,16 @@ void EventLoop::pushTask(AbstractTask* task) {
 
 void EventLoop::loop() {
     auto eventDispatcher = EventDispatcher::getInstance();
-    std::unique_lock lock(m_mutex);
+    std::unique_lock lock(mMutex);
 
-    while (m_running) {
-        if (m_tasks.empty()) {
-            m_cv.wait(lock);
+    while (mRunning) {
+        if (mTasks.empty()) {
+            mCv.wait(lock);
             continue;
         }
 
-        auto task = m_tasks.front();
-        m_tasks.pop();
+        auto task = mTasks.front();
+        mTasks.pop();
         lock.unlock();
 
         eventDispatcher->lockAttachments();

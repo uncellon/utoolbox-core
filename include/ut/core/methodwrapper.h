@@ -1,6 +1,6 @@
 /******************************************************************************
  * 
- * Copyright (C) 2022 Dmitry Plastinin
+ * Copyright (C) 2023 Dmitry Plastinin
  * Contact: uncellon@yandex.ru, uncellon@gmail.com, uncellon@mail.ru
  * 
  * This file is part of the UToolbox Core library.
@@ -47,15 +47,15 @@ public:
 
     // Copy constructor
     MethodWrapper(const MethodWrapper& other) 
-    : m_object(other.m_object),
-      m_method(other.m_method) { }
+    : mObject(other.mObject),
+      mMethod(other.mMethod) { }
 
     // Move constructor
     MethodWrapper(MethodWrapper&& other) 
-    : m_object(other.m_object),
-      m_method(other.m_method) {
-        other.m_object = nullptr;
-        other.m_method = nullptr;
+    : mObject(other.mObject),
+      mMethod(other.mMethod) {
+        other.mObject = nullptr;
+        other.mMethod = nullptr;
     }
 
     virtual ~MethodWrapper() = default;
@@ -69,8 +69,8 @@ public:
     }
 
     void bind(TClass* object, TReturn (TClass::*method)(TArgs...)) {
-        m_object = object;
-        m_method = method;
+        mObject = object;
+        mMethod = method;
     }
 
     /**************************************************************************
@@ -78,7 +78,7 @@ public:
      *************************************************************************/
 
     virtual TReturn operator()(TArgs... args) override {
-        return (m_object->*m_method)(args...);
+        return (mObject->*mMethod)(args...);
     }
 
     // Copy assignment operator
@@ -86,8 +86,8 @@ public:
         if (this == &other) {
             return *this;
         }
-        m_object = other.m_object;
-        m_method = other.m_method;
+        mObject = other.mObject;
+        mMethod = other.mMethod;
         return *this;
     }
 
@@ -96,10 +96,10 @@ public:
         if (this == &other) {
             return *this;
         }
-        m_object = other.m_object;
-        m_method = other.m_method;
-        other.m_object = nullptr;
-        other.m_method = nullptr;
+        mObject = other.mObject;
+        mMethod = other.mMethod;
+        other.mObject = nullptr;
+        other.mMethod = nullptr;
         return *this;
     }
 
@@ -111,16 +111,16 @@ protected:
     virtual bool isEquals(const AbstractWrapper<TReturn(TArgs...)>& other) const override {
         const TMWrapper* otherPtr = dynamic_cast<const TMWrapper*>(&other);
         return otherPtr != nullptr
-            && m_object == otherPtr->m_object
-            && m_method == otherPtr->m_method;
+            && mObject == otherPtr->mObject
+            && mMethod == otherPtr->mMethod;
     }
 
     /**************************************************************************
      * Members
      *************************************************************************/
 
-    TClass* m_object = nullptr;
-    TReturn (TClass::*m_method)(TArgs...) = nullptr;
+    TClass* mObject = nullptr;
+    TReturn (TClass::*mMethod)(TArgs...) = nullptr;
 }; // class MethodWrapper
 
 } // namespace UT

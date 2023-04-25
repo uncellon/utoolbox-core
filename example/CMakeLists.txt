@@ -1,9 +1,5 @@
-set(EXAMPLE_PROJECT UTCoreExample)
+set(EXAMPLE_PROJECT ${PROJECT_NAME}Example)
 
-file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false *.h *.cpp)
-
-set(SOURCES ${TEST_SOURCES})
-
-add_executable(${EXAMPLE_PROJECT} ${TEST_SOURCES})
+add_executable(${EXAMPLE_PROJECT} main.cpp)
 
 target_link_libraries(${EXAMPLE_PROJECT} PUBLIC ${PROJECT_NAME})

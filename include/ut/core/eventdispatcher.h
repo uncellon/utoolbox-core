@@ -1,6 +1,6 @@
 /******************************************************************************
  * 
- * Copyright (C) 2022 Dmitry Plastinin
+ * Copyright (C) 2023 Dmitry Plastinin
  * Contact: uncellon@yandex.ru, uncellon@gmail.com, uncellon@mail.ru
  * 
  * This file is part of the UToolbox Core library.
@@ -48,8 +48,8 @@ public:
 
     bool attachmentValid(AbstractEvent* event, AbstractDelegate* delegate);
 
-    inline void lockAttachments() { m_mutex.lock(); }
-    inline void unlockAttachments() { m_mutex.unlock(); }
+    inline void lockAttachments() { mMutex.lock(); }
+    inline void unlockAttachments() { mMutex.unlock(); }
 
 protected:
     struct DispatcherInfo {
@@ -62,12 +62,12 @@ protected:
      * Members
      *************************************************************************/
 
-    static std::mutex m_instanceMutex;
-    static EventDispatcher* m_instance;
+    static std::mutex mInstanceMutex;
+    static EventDispatcher* mInstance;
 
-    std::mutex m_mutex;
-    std::mutex m_vectorMutex;
-    std::vector<DispatcherInfo> m_attachments;
+    std::mutex mMutex;
+    std::mutex mVectorMutex;
+    std::vector<DispatcherInfo> mAttachments;
 
 private:
     /**************************************************************************
@@ -77,6 +77,6 @@ private:
     EventDispatcher() = default;    
 }; // class EventDispatcher
 
-} // Hlk
+} // namespace UT
 
 #endif // UT_EVENT_DISPATCHER_H

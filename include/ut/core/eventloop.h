@@ -1,6 +1,6 @@
 /******************************************************************************
  * 
- * Copyright (C) 2022 Dmitry Plastinin
+ * Copyright (C) 2023 Dmitry Plastinin
  * Contact: uncellon@yandex.ru, uncellon@gmail.com, uncellon@mail.ru
  * 
  * This file is part of the UToolbox Core library.
@@ -23,12 +23,10 @@
 #ifndef UT_EVENT_LOOP_H
 #define UT_EVENT_LOOP_H
 
-#include "delegate.h"
 #include "object.h"
 #include "task.h"
 
 #include <queue>
-#include <thread>
 
 namespace UT {
 
@@ -60,14 +58,14 @@ protected:
      * Members
      *************************************************************************/
 
-    static std::mutex m_instanceMutex;
-    static EventLoop* m_mainInstance;
+    static EventLoop* mMainInstance;
+    static std::mutex mInstanceMutex;
 
-    bool m_running = false;
-    std::condition_variable m_cv;
-    std::mutex m_mutex;
-    std::queue<AbstractTask *> m_tasks;
-    std::thread* m_threadLoop = nullptr;
+    bool mRunning = false;
+    std::condition_variable mCv;
+    std::mutex mMutex;
+    std::queue<AbstractTask *> mTasks;
+    std::thread* mThreadLoop = nullptr;
 };
 
 } // namespace UT

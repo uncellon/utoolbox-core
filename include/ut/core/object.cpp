@@ -1,6 +1,6 @@
 /******************************************************************************
  * 
- * Copyright (C) 2022 Dmitry Plastinin
+ * Copyright (C) 2023 Dmitry Plastinin
  * Contact: uncellon@yandex.ru, uncellon@gmail.com, uncellon@mail.ru
  * 
  * This file is part of the UToolbox Core library.
@@ -22,7 +22,6 @@
 
 #include "eventdispatcher.h"
 #include "eventloop.h"
-#include "object.h"
 
 namespace UT {
 
@@ -31,18 +30,18 @@ namespace UT {
  *****************************************************************************/
 
 Object::Object(EventLoop* eventLoop)
-: m_eventLoop(eventLoop) { }
+: mEventLoop(eventLoop) { }
 
 Object::Object(Object* parent) {
     if (!parent) {
-        m_eventLoop = EventLoop::getMainInstance();
+        mEventLoop = EventLoop::getMainInstance();
         return;
     }
     if (!parent->eventLoop()) {
-        m_eventLoop = EventLoop::getMainInstance();
+        mEventLoop = EventLoop::getMainInstance();
         return;
     }
-    m_eventLoop = parent->eventLoop();
+    mEventLoop = parent->eventLoop();
 }
 
 Object::~Object() {

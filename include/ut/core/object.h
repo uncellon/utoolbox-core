@@ -1,6 +1,6 @@
 /******************************************************************************
  * 
- * Copyright (C) 2022 Dmitry Plastinin
+ * Copyright (C) 2023 Dmitry Plastinin
  * Contact: uncellon@yandex.ru, uncellon@gmail.com, uncellon@mail.ru
  * 
  * This file is part of the UToolbox Core library.
@@ -48,14 +48,14 @@ private:
      * Members
      *************************************************************************/
 
-    EventLoop* m_eventLoop = nullptr;
+    EventLoop* mEventLoop = nullptr;
 }; // class Object
 
 /******************************************************************************
  * Inline definition: Accessors / Mutators
  *****************************************************************************/
 
-inline EventLoop* Object::eventLoop() const { return m_eventLoop; }
+inline EventLoop* Object::eventLoop() const { return mEventLoop; }
 
 } // namespace UT
 

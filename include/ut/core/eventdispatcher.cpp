@@ -1,6 +1,6 @@
 /******************************************************************************
  * 
- * Copyright (C) 2022 Dmitry Plastinin
+ * Copyright (C) 2023 Dmitry Plastinin
  * Contact: uncellon@yandex.ru, uncellon@gmail.com, uncellon@mail.ru
  * 
  * This file is part of the UToolbox Core library.
@@ -22,71 +22,70 @@
 
 #include "abstractevent.h"
 #include "eventdispatcher.h"
-#include "object.h"
 
 namespace UT {
 
-std::mutex EventDispatcher::m_instanceMutex;
-EventDispatcher* EventDispatcher::m_instance = nullptr;
+std::mutex EventDispatcher::mInstanceMutex;
+EventDispatcher* EventDispatcher::mInstance = nullptr;
 
 EventDispatcher* EventDispatcher::getInstance() {
-    std::unique_lock lock(m_instanceMutex);
-    if (!m_instance) {
-        m_instance = new EventDispatcher();
+    std::unique_lock lock(mInstanceMutex);
+    if (!mInstance) {
+        mInstance = new EventDispatcher();
     }
-    return m_instance;
+    return mInstance;
 }
 
 void EventDispatcher::registerAttachment(AbstractEvent* event, Object* object, AbstractDelegate* delegate) {
-    std::unique_lock lock(m_vectorMutex);
+    std::unique_lock lock(mVectorMutex);
     
-    m_attachments.emplace_back(DispatcherInfo { event, object, delegate });
+    mAttachments.emplace_back(DispatcherInfo { event, object, delegate });
 }
 
 void EventDispatcher::removeAttachment(AbstractEvent* event, AbstractDelegate* delegate) {
-    std::unique_lock lock(m_vectorMutex);
+    std::unique_lock lock(mVectorMutex);
 
-    for (size_t i = 0; i < m_attachments.size(); ++i) {
-        if (m_attachments[i].event != event 
-            || delegate != m_attachments[i].delegate) {
+    for (size_t i = 0; i < mAttachments.size(); ++i) {
+        if (mAttachments[i].event != event 
+            || delegate != mAttachments[i].delegate) {
             continue;
         }
-        m_attachments.erase(m_attachments.begin() + i);
+        mAttachments.erase(mAttachments.begin() + i);
         return;
     }
 }
 
 void EventDispatcher::eventDestroyed(AbstractEvent* event) {
-    std::unique_lock lock(m_vectorMutex);
+    std::unique_lock lock(mVectorMutex);
 
-    for (size_t i = 0; i < m_attachments.size(); ++i) {
-        if (m_attachments[i].event != event) {
+    for (size_t i = 0; i < mAttachments.size(); ++i) {
+        if (mAttachments[i].event != event) {
             continue;
         }
-        m_attachments.erase(m_attachments.begin() + i);
+        mAttachments.erase(mAttachments.begin() + i);
         --i;
     }
 }
 
 void EventDispatcher::clean(Object* object) {
-    std::unique_lock lock(m_vectorMutex);
+    std::unique_lock lock(mVectorMutex);
 
-    for (size_t i = 0; i < m_attachments.size(); ++i) {
-        if (m_attachments[i].object != object) {
+    for (size_t i = 0; i < mAttachments.size(); ++i) {
+        if (mAttachments[i].object != object) {
             continue;
         }
-        m_attachments[i].event->removeEventHandler(m_attachments[i].delegate);
-        m_attachments.erase(m_attachments.begin() + i);
+        mAttachments[i].event->removeEventHandler(mAttachments[i].delegate);
+        mAttachments.erase(mAttachments.begin() + i);
         --i;
     }
 }
 
 bool EventDispatcher::attachmentValid(AbstractEvent* event, AbstractDelegate* delegate) {
-    std::unique_lock lock(m_vectorMutex);
+    std::unique_lock lock(mVectorMutex);
 
-    for (size_t i = 0; i < m_attachments.size(); ++i) {
-        if (m_attachments[i].event == event
-            && m_attachments[i].delegate == delegate) {
+    for (size_t i = 0; i < mAttachments.size(); ++i) {
+        if (mAttachments[i].event == event
+            && mAttachments[i].delegate == delegate) {
             return true;
         }
     }
