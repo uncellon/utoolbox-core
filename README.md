@@ -1,27 +1,71 @@
-# UToolbox Core
+# Uncellon's Toolbox Core
 
 ![UToolbox Logo](ut-logo.svg)
 
 - [Description](#description)
 - [Examples](#examples)
+    - [Event with function handler based on default event loop](#event-with-function-handler-based-on-default-event-loop)
     - [Event with function handler](#event-with-function-handler)
     - [Event with method handler](#event-with-method-handler)
     - [Event with lambda handler](#event-with-lambda-handler)
 
 ## Description
-Main goal of UToolbox Core is provide an easy event-driven approach to application development.
+Main goal of UToolbox Core is provide an easy thread-safe event-driven approach to application development.
 
-It's based on event loops - independent thread that process various user tasks in order. Every custom class that needs to implement events must iherit from the `UT::Object` class. The `UT::Object` constructor takes one argument, a reference to another `UT::Object` object. In other words, the parent object. Root `UT::Object` must be an event loop. Thus, all objects associated with the event loop will push tasks in this event loop. When the event loop processes a task, it calls the event handlers associated with that event. Event handler is a wrapped object that contains function, method or lambda.
+It should be understood that this approach to application development leads to multithreading. You will have at least 2 threads: your main thread and the event handling thread (or event loop in another words). In fact, calling (or "fire" in C#) an event is adding the appropriate tasks to the event processing thread. Perhaps this approach complicates the architecture of the application, but instead you should not worry about blocking your main thread.
+
+Every object that can handle events must inherit from `UT::Object`. This requirement is due to two reasons:
+
+1. you don't have to worry about unsubscribing from events if the object with handler is destroyed;
+2. and each `UT::Object` belongs to a specific event handling thread and is serviced accordingly by that same thread.
 
 ## Examples
+
+### Event with function handler based on default event loop
+
+This library implements the default event processing thread. It is based on the singleton pattern. If you don't want to manage your event loops, or you don't need more than one such thread, you can safely trust this thing.
+
+```cpp
+#include <iostream>
+#include <ut/core/event.h>
+
+bool called = false;
+
+class EventHolder : public UT::Object {
+public:
+    EventHolder(UT::Object* parent = nullptr) : UT::Object(parent) { }
+
+    void writeMessage(const std::string& message) {
+        onMessageWritten(message);
+    }
+
+    UT::Event<const std::string> onMessageWritten;
+
+}; // class EventHolder
+
+void someUsefulFunction(const std::string message) {
+    std::cout << message << std::endl;
+    called = true;
+}
+
+int main(int argc, char* argv[]) {
+    EventHolder eh;
+    eh.onMessageWritten.addEventHandler(UT::EventLoop::getMainInstance(), someUsefulFunction);
+
+    eh.writeMessage("Hello, event-driven World!");
+
+    while (!called) { } //Just "spinlock" to sync output. Your main() function can execute faster than the message is displayed on the screen.
+
+    return 0;
+}
+```
 
 ### Event with function handler
 ```cpp
 #include <iostream>
-#include <unistd.h>
 #include <ut/core/event.h>
-#include <ut/core/eventloop.h>
-#include <ut/core/object.h>
+
+bool called = false;
 
 class EventHolder : public UT::Object {
 public:
@@ -32,10 +76,12 @@ public:
     }
 
     UT::Event<std::string> onMessageWritten;
+
 }; // class EventHolder
 
 void stdoutHandler(std::string message) {
     std::cout << "Message received: " << message << std::endl;
+    called = true;
 }
 
 int main(int argc, char* argv[]) {
@@ -46,7 +92,8 @@ int main(int argc, char* argv[]) {
 
     eh.writeMessage("Hello, World!");
 
-    sleep(1); // Delay for message output, event loop is another thread.
+    while (!called) { } //Just "spinlock" to sync output. Your main() function can execute faster than the message is displayed on the screen.
+
     return 0;
 }
 ```
@@ -54,10 +101,9 @@ int main(int argc, char* argv[]) {
 ### Event with method handler
 ```cpp
 #include <iostream>
-#include <unistd.h>
 #include <ut/core/event.h>
-#include <ut/core/eventloop.h>
-#include <ut/core/object.h>
+
+bool called = false;
 
 class EventHolder : public UT::Object {
 public:
@@ -68,6 +114,7 @@ public:
     }
 
     UT::Event<std::string> onMessageWritten;
+
 }; // class EventHolder
 
 class EventHandler : public UT::Object {
@@ -76,7 +123,9 @@ public:
 
     void messageHandler(std::string message) {
         std::cout << "Message received: " << message << std::endl;
+        called = true;
     }
+
 }; // class EventHandler
 
 int main(int argc, char* argv[]) {
@@ -90,18 +139,19 @@ int main(int argc, char* argv[]) {
 
     eh.writeMessage("Hello, World!");
 
-    sleep(1); // Delay for message output, event loop is another thread.
+    while (!called) { } //Just "spinlock" to sync output. Your main() function can execute faster than the message is displayed on the screen.
+
     return 0;
+
 }
 ```
 
 ### Event with lambda handler
 ```cpp
 #include <iostream>
-#include <unistd.h>
 #include <ut/core/event.h>
-#include <ut/core/eventloop.h>
-#include <ut/core/object.h>
+
+bool called = false;
 
 class EventHolder : public UT::Object {
 public:
@@ -120,12 +170,14 @@ int main(int argc, char* argv[]) {
     EventHolder eh(&mainEventLoop);
 
     eh.onMessageWritten.addEventHandler(&mainEventLoop, [] (std::string message) {
-        std::cout << "Message received:" << message << std::endl;
+        std::cout << "Message received: " << message << std::endl;
+        called = true;
     });
 
     eh.writeMessage("Hello, World!");
 
-    sleep(1); // Delay for message output, event loop is another thread.
+    while (!called) { } //Just "spinlock" to sync output. Your main() function can execute faster than the message is displayed on the screen.
+
     return 0;
 }
 ```

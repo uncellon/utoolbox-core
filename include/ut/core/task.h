@@ -67,6 +67,7 @@ protected:
      *************************************************************************/
 
     AbstractEvent* mSender = nullptr;
+
 }; // class AbstractTask
 
 
@@ -115,6 +116,7 @@ protected:
      *************************************************************************/
 
     Delegate<void()>* mDelegate;
+
 }; // class Task<void()>
 
 
@@ -155,6 +157,7 @@ protected:
 
     Delegate<void(TArgs...)>* mDelegate;
     std::tuple<TArgs...> mArgs;
+
 }; // class Task<void(TArgs...)>
 
 
@@ -194,6 +197,7 @@ protected:
 
     Delegate<TReturn()>* mDelegate;
     std::promise<TReturn> mPromise;
+
 }; // class Task<TReturn()>
 
 
@@ -235,6 +239,7 @@ protected:
     Delegate<TReturn(TArgs...)>* mDelegate;
     std::tuple<TArgs...> mArgs;
     std::promise<TReturn> mPromise;
+    
 }; // class Task<TReturn(TArgs...)>
 
 } // namespace UT

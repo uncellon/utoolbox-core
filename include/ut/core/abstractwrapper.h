@@ -63,6 +63,7 @@ protected:
      *************************************************************************/
 
     virtual bool isEquals(const TWrapper& other) const = 0;    
+    
 }; // class AbstractWrapper
 
 } // namespace UT

@@ -40,6 +40,7 @@ public:
      *************************************************************************/
 
     virtual void removeEventHandler(AbstractDelegate* delegate) = 0;
+    
 }; // class AbstractEvent
 
 } // namespace UT

@@ -32,6 +32,7 @@ public:
      *************************************************************************/
 
     virtual ~AbstractDelegate() = default;
+    
 }; // class AbstractDelegate
 
 } // namespace UT

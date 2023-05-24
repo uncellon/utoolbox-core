@@ -121,6 +121,7 @@ protected:
 
     TClass* mObject = nullptr;
     TReturn (TClass::*mMethod)(TArgs...) = nullptr;
+    
 }; // class MethodWrapper
 
 } // namespace UT

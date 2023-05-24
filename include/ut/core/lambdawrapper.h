@@ -109,6 +109,7 @@ protected:
      *************************************************************************/
 
     TLambda* mLambda = nullptr;
+    
 }; // class LambdaWrapper
 
 } // namespace UT

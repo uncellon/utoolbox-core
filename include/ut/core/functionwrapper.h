@@ -111,6 +111,7 @@ protected:
      *************************************************************************/
 
     TReturn (*mFunc)(TArgs...) = nullptr;
+    
 }; // class FunctionWrapper
 
 } // namespace UT

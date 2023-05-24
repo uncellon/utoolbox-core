@@ -201,6 +201,7 @@ protected:
 
     std::mutex mMutex;
     std::vector<EventHandlerInfo> mHandlers;
+    
 }; // class Event
 
 } // namespace UT

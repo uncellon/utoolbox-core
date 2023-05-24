@@ -66,7 +66,8 @@ protected:
     std::mutex mMutex;
     std::queue<AbstractTask *> mTasks;
     std::thread* mThreadLoop = nullptr;
-};
+
+}; // class EventLoop
 
 } // namespace UT
 

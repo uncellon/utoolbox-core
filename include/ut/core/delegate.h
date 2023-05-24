@@ -152,6 +152,7 @@ protected:
      *************************************************************************/
 
     AbstractWrapper<TReturn(TArgs...)>* mWrapper = nullptr;
+    
 }; // class Delegate
 
 } // namespace UT

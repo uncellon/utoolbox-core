@@ -74,7 +74,8 @@ private:
      * Constructors / Destructors (Private)
      *************************************************************************/
 
-    EventDispatcher() = default;    
+    EventDispatcher() = default;
+    
 }; // class EventDispatcher
 
 } // namespace UT
