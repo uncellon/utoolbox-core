@@ -1,6 +1,6 @@
 # Uncellon's Toolbox Core
 
-![UToolbox Logo](ut-logo.svg)
+![UToolbox Logo](logo.png)
 
 - [Description](#description)
 - [Examples](#examples)
