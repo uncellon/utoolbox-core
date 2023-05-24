@@ -19,6 +19,11 @@ Every object that can handle events must inherit from `UT::Object`. This require
 1. you don't have to worry about unsubscribing from events if the object with handler is destroyed;
 2. and each `UT::Object` belongs to a specific event handling thread and is serviced accordingly by that same thread.
 
+## Prerequisites
+
+- C++17 or higher
+- CMake >= 3.16
+
 ## Examples
 
 ### Event with function handler based on default event loop
