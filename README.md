@@ -3,6 +3,7 @@
 ![UToolbox Logo](logo.png)
 
 - [Description](#description)
+- [Prerequisites](#prerequisites)
 - [Examples](#examples)
     - [Event with function handler based on default event loop](#event-with-function-handler-based-on-default-event-loop)
     - [Event with function handler](#event-with-function-handler)
