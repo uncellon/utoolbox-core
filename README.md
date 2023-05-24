@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
 
     eh.writeMessage("Hello, event-driven World!");
 
-    while (!called) { } //Just "spinlock" to sync output. Your main() function can execute faster than the message is displayed on the screen.
+    while (!called) { } // Just "spinlock" to sync output. Your main() function can execute faster than the message is displayed on the screen.
 
     return 0;
 }
@@ -92,7 +92,7 @@ int main(int argc, char* argv[]) {
 
     eh.writeMessage("Hello, World!");
 
-    while (!called) { } //Just "spinlock" to sync output. Your main() function can execute faster than the message is displayed on the screen.
+    while (!called) { } // Just "spinlock" to sync output. Your main() function can execute faster than the message is displayed on the screen.
 
     return 0;
 }
@@ -139,7 +139,7 @@ int main(int argc, char* argv[]) {
 
     eh.writeMessage("Hello, World!");
 
-    while (!called) { } //Just "spinlock" to sync output. Your main() function can execute faster than the message is displayed on the screen.
+    while (!called) { } // Just "spinlock" to sync output. Your main() function can execute faster than the message is displayed on the screen.
 
     return 0;
 
@@ -176,7 +176,7 @@ int main(int argc, char* argv[]) {
 
     eh.writeMessage("Hello, World!");
 
-    while (!called) { } //Just "spinlock" to sync output. Your main() function can execute faster than the message is displayed on the screen.
+    while (!called) { } // Just "spinlock" to sync output. Your main() function can execute faster than the message is displayed on the screen.
 
     return 0;
 }
