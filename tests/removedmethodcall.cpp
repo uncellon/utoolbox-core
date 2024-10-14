@@ -1,5 +1,4 @@
 #include <ut/core/event.h>
-#include <iostream>
 #include <unistd.h>
 
 using namespace UT;
@@ -12,7 +11,7 @@ public:
     A(EventLoop* loop) : Object(loop) { }
 
     void fireEvent() { onTriggered(); }
-    
+
     Event<> onTriggered;
 };
 
@@ -41,7 +40,7 @@ int main(int argc, char* argv[]) {
     if (counter != 1) {
         return 1;
     }
-    
+
     delete a;
     return 0;
 }

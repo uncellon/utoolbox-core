@@ -1,4 +1,3 @@
-#include "ut/core/delegate.h"
 #include "ut/core/event.h"
 #include "ut/core/eventloop.h"
 #include "ut/core/object.h"
@@ -57,7 +56,7 @@ int main(int argc, char* argv[]) {
 
     derivedObject1->onMessage.addEventHandler(derivedObject2, printFunction);
     derivedObject1->onMessage.removeEventHandler(derivedObject2, printFunction);
-    
+
     derivedObject1->onMessage.addEventHandler(derivedObject2, [] (const std::string& message) {
         std::cout << "Lambda print: " << message << std::endl;
     });

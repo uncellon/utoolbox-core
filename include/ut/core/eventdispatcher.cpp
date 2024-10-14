@@ -1,23 +1,23 @@
 /******************************************************************************
- * 
+ *
  * Copyright (C) 2023 Dmitry Plastinin
  * Contact: uncellon@yandex.ru, uncellon@gmail.com, uncellon@mail.ru
- * 
+ *
  * This file is part of the UToolbox Core library.
- * 
- * UToolbox Core is free software: you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as pubblished by 
- * the Free Software Foundation, either version 3 of the License, or (at your 
+ *
+ * UToolbox Core is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as pubblished by
+ * the Free Software Foundation, either version 3 of the License, or (at your
  * option) any later version.
- * 
+ *
  * UToolbox Core is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser Public License for more
  * details
- * 
+ *
  * You should have received a copy of the GNU Lesset General Public License
  * along with UToolbox Core. If not, see <https://www.gnu.org/licenses/>.
- * 
+ *
  *****************************************************************************/
 
 #include "abstractevent.h"
@@ -38,7 +38,7 @@ EventDispatcher* EventDispatcher::getInstance() {
 
 void EventDispatcher::registerAttachment(AbstractEvent* event, Object* object, AbstractDelegate* delegate) {
     std::unique_lock lock(mVectorMutex);
-    
+
     mAttachments.emplace_back(DispatcherInfo { event, object, delegate });
 }
 
@@ -46,7 +46,7 @@ void EventDispatcher::removeAttachment(AbstractEvent* event, AbstractDelegate* d
     std::unique_lock lock(mVectorMutex);
 
     for (size_t i = 0; i < mAttachments.size(); ++i) {
-        if (mAttachments[i].event != event 
+        if (mAttachments[i].event != event
             || delegate != mAttachments[i].delegate) {
             continue;
         }

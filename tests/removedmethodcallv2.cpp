@@ -1,5 +1,4 @@
 #include <ut/core/event.h>
-#include <iostream>
 #include <unistd.h>
 
 using namespace UT;
@@ -12,7 +11,7 @@ public:
     A(Object* parent = nullptr) : Object(parent) { }
 
     void fireEvent() { onTriggered(); }
-    
+
     Event<> onTriggered;
 };
 
@@ -33,7 +32,7 @@ int main(int argc, char* argv[]) {
     a->fireEvent();
 
     sleep(1);
-    
+
     a->onTriggered.removeEventHandler(b, &B::triggerHandler);
 
     delete b;
@@ -42,7 +41,7 @@ int main(int argc, char* argv[]) {
     if (counter != 1) {
         return 1;
     }
-    
+
     delete a;
     return 0;
 }

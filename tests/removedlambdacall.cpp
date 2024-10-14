@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
 
     auto a = new A(&mainLoop);
     auto b = new B(&mainLoop);
-    
+
     a->fireEvent();
     a->onTriggered.addEventHandler(b, [b] () {
         b->increaseCounter();

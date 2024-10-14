@@ -1,23 +1,23 @@
 /******************************************************************************
- * 
+ *
  * Copyright (C) 2023 Dmitry Plastinin
  * Contact: uncellon@yandex.ru, uncellon@gmail.com, uncellon@mail.ru
- * 
+ *
  * This file is part of the UToolbox Core library.
- * 
- * UToolbox Core is free software: you can redistribute it and/or modify it 
- * under the terms of the GNU Lesser General Public License as pubblished by 
- * the Free Software Foundation, either version 3 of the License, or (at your 
+ *
+ * UToolbox Core is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as pubblished by
+ * the Free Software Foundation, either version 3 of the License, or (at your
  * option) any later version.
- * 
+ *
  * UToolbox Core is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser Public License for more
  * details
- * 
+ *
  * You should have received a copy of the GNU Lesset General Public License
  * along with UToolbox Core. If not, see <https://www.gnu.org/licenses/>.
- * 
+ *
  *****************************************************************************/
 
 #ifndef UT_METHOD_WRAPPER_H
@@ -46,12 +46,12 @@ public:
     }
 
     // Copy constructor
-    MethodWrapper(const MethodWrapper& other) 
+    MethodWrapper(const MethodWrapper& other)
     : mObject(other.mObject),
       mMethod(other.mMethod) { }
 
     // Move constructor
-    MethodWrapper(MethodWrapper&& other) 
+    MethodWrapper(MethodWrapper&& other)
     : mObject(other.mObject),
       mMethod(other.mMethod) {
         other.mObject = nullptr;
@@ -64,8 +64,8 @@ public:
      * Methods
      *************************************************************************/
 
-    virtual TMWrapper* clone() override { 
-        return new TMWrapper(*this); 
+    virtual TMWrapper* clone() override {
+        return new TMWrapper(*this);
     }
 
     void bind(TClass* object, TReturn (TClass::*method)(TArgs...)) {
@@ -121,7 +121,7 @@ protected:
 
     TClass* mObject = nullptr;
     TReturn (TClass::*mMethod)(TArgs...) = nullptr;
-    
+
 }; // class MethodWrapper
 
 } // namespace UT
