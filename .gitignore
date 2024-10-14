@@ -1,5 +1,3 @@
-# VSCode files
+.cache
 .vscode
-
-# CMake build
 build
