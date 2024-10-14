@@ -74,6 +74,8 @@ endif()
 
 if(BUILD_TESTING)
     include(CTest)
+    target_compile_options(${PROJECT_NAME} PRIVATE -coverage)
+    target_link_options(${PROJECT_NAME} PRIVATE -coverage)
     add_subdirectory(tests)
     add_test(NAME FunctionDelegateCall COMMAND FunctionDelegateCallTest)
     add_test(NAME MethodDelegateCall COMMAND MethodDelegateCallTest)
